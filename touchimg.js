@@ -4,6 +4,7 @@
 function touchimg(options){
     var j=0;
     var timer;
+    var loopTime=options.loopTime;
     var elem=document.getElementById(options.elem);
     var temp_img=elem.innerHTML;
     //创建遮罩
@@ -54,14 +55,14 @@ function touchimg(options){
         elem_ig_ul.style.transform="translate(-"+elem_width*j+"px,0)";
     }
     function play(){
-        timer=setInterval(function(){scroll_ul("right")},1000);
+        timer=setInterval(function(){scroll_ul("right")},loopTime);
     }
     function stop(){
         clearInterval(timer);
     }
     elem.onmouseover=stop;
     elem.onmouseout=play;
-    //play();
+    play();
     //touch
     var startX,startY,j_change=0;
     elem.addEventListener("touchstart",function(e){
@@ -83,19 +84,18 @@ function touchimg(options){
             if(Math.abs(distanceX)>=Math.abs(distanceY)){
                 distanceX>0?j_change=-1:j_change=1;
                 var trans_x=-j*elem_width+distanceX;
-                console.log(trans_x);
-                console.log(maxscro);
                 if(trans_x>0||trans_x<maxscro){
                     var scale_val=Math.abs(distanceX)*0.0015+1;
-                    var origin_tran="left center";
+                    var trans_label=1-Math.abs(distanceX)*0.0013;
+                    //trans_x>0?"":scale_val=1.2;
+                    var origin_tran="5% center";
                     var temp_x=0;
-                    trans_x<maxscro?origin_tran="right center":"";
+                    trans_x<maxscro?origin_tran="95% center":"";
                     trans_x>0?temp_x=0:"";
                     trans_x<maxscro?temp_x=maxscro:"";
-                    elem_ig_ul.style.transform="scale("+scale_val+") translate("+temp_x+"px,0)";
+                    elem_ig_ul.style.transform="scale("+scale_val+") translate("+temp_x*trans_label+"px,0)";
                     elem_ig_ul.style.transformOrigin=origin_tran;
                 }else if(trans_x<0&&trans_x>maxscro){
-                    console.log(2);
                     elem_ig_ul.style.transform="translate("+trans_x+"px,0)";
                 }
                 e.preventDefault();
@@ -107,9 +107,9 @@ function touchimg(options){
             if((j_change==-1&&j!=0)||(j_change==1&&j!=img_length-1)){
                 j+=j_change;
             };
-            //elem_ig_ul.style.transform="translate(-"+elem_width*j+"px,0)";
+            elem_ig_ul.style.transform="translate(-"+elem_width*j+"px,0)";
 
-            //play();
+            play();
     },false);
 
 }
